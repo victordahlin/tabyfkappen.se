@@ -54,11 +54,11 @@ class RestController extends Controller
             $offer_used = $offer_used->push($offer);
         }
 
-        $offer_not_used = $offers->diff($offer_used)->toJson();
+        $offer_not_used = $offers->diff($offer_used);
 
-        return $offer_not_used;
+        return response()->json($offer_not_used, 200);
 
-/*
+        /*
         $offer_used_ids = [];
         foreach($offers_used as $used) {
             array_push($offer_used_ids, $used->offer_id);
@@ -78,8 +78,6 @@ class RestController extends Controller
             }
         }
         return response()->json($offers, 200);*/
-
-
     }
 
     /**
