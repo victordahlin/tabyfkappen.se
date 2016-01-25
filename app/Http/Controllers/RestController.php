@@ -18,7 +18,7 @@ class RestController extends Controller
         // Apply the jwt.auth middleware to all methods in this controller
         // except for the authenticate method. We don't want to prevent
         // the user from retrieving their token if they don't already have it
-        $this->middleware('jwt.auth', ['except' => ['authenticate']]);
+        //$this->middleware('jwt.auth', ['except' => ['authenticate']]);
     }
 
     /**
@@ -46,8 +46,19 @@ class RestController extends Controller
 
         $user_id = JWTAuth::parseToken()->authenticate()->id;
 
-        $offers_used = \App\OffersUsed::where('user_id', '=', $user_id)->get();
+        $offer_id_user = \App\OffersUsed::where('user_id', '=', $user_id)->get()->pluck('offer_id');
+        $offer_used = collect();
 
+        foreach($offer_id_user as $id) {
+            $offer = \App\Offers::where('id', $id)->first();
+            $offer_used = $offer_used->push($offer);
+        }
+
+        $offer_not_used = $offers->diff($offer_used)->toJson();
+
+        return $offer_not_used;
+
+/*
         $offer_used_ids = [];
         foreach($offers_used as $used) {
             array_push($offer_used_ids, $used->offer_id);
@@ -66,7 +77,25 @@ class RestController extends Controller
                 }
             }
         }
-        return response()->json($offers, 200);
+        return response()->json($offers, 200);*/
+
+
+    }
+
+    public function getSelectedOffers() {
+        $offers = \App\Offers::all();
+
+        $offer_id_user = \App\OffersUsed::where('user_id', 1)->get()->pluck('offer_id');
+        $offer_used = collect();
+
+        foreach($offer_id_user as $id) {
+            $offer = \App\Offers::where('id', $id)->first();
+            $offer_used = $offer_used->push($offer);
+        }
+
+        $collection = $offers->diff($offer_used)->count();
+
+        return view('index', compact('collection'));
     }
 
     /**

@@ -38,6 +38,9 @@ Route::get('auth/login', 'Auth\AuthController@getLogin');
 Route::post('auth/login', 'Auth\AuthController@authenticate');
 Route::get('auth/logout', 'Auth\AuthController@getLogout');
 
+Route::get('test', 'RestController@getSelectedOffers');
+
+
 Route::group(['prefix' => 'api/v1/'], function()
 {
     Route::post('create', 'Auth\AuthenticateController@authenticate');
