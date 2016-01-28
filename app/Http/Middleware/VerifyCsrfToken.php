@@ -14,6 +14,6 @@ class VerifyCsrfToken extends BaseVerifier
     protected $except = [
         'api/v1/*',
         'logout',
-        'reset'
+        'password/reset'
     ];
 }
