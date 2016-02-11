@@ -57,27 +57,6 @@ class RestController extends Controller
         $offer_not_used = $offers->diff($offer_used);
 
         return response()->json($offer_not_used, 200);
-
-        /*
-        $offer_used_ids = [];
-        foreach($offers_used as $used) {
-            array_push($offer_used_ids, $used->offer_id);
-        }
-
-        foreach($offers as $offer) {
-            if(array_search($offer->id, $offer_used_ids)) {
-                unset($offer);
-            }
-        }
-
-        foreach($offers as $key => $offer) {
-            foreach($offer_used_ids as $id) {
-                if($offer->id === $id) {
-                    unset($offers[$key]);
-                }
-            }
-        }
-        return response()->json($offers, 200);*/
     }
 
     /**
