@@ -21,13 +21,13 @@ class SettingsController extends Controller
     {
         $admin = \App\User::find(1);
 
-        return view('pages.settings',compact('admin'));
+        return view('pages.settings', compact('admin'));
     }
 
     /**
      * Store file and insert new codes to the database
      *
-     * @param Request $request
+     * @param Request $request:
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function store(Request $request)
@@ -44,52 +44,54 @@ class SettingsController extends Controller
         $codes = fopen(storage_path() . '/app/' . $fileName, 'r');
 
         // Save codes to the database
-        if($codes) {
+        if ($codes) {
             $index = 0;
             $indexOCR = 0;
-            while(($code = fgets($codes)) !== false) {
+            $new_entries = 0;
 
-                // First code after account number
-                if($index == 2) {
+            // Skip 2 first lines
+            $code = fgets($codes);
+            $code = fgets($codes);
+
+            while (($code = fgets($codes)) !== false) {
+
+                // If file really long and bank inserted special
+                // row breaks then ignore two lines
+                if($indexOCR === 0 && strpos($code, 'SEK') !== false) {
+                    $code = fgets($codes);
+                    $code = fgets($codes);
+                    $indexOCR = 0;
+                }
+
+                // First row and not empty
+                if($indexOCR === 0 && !empty($code)) {
                     $numbers = explode(' ', $code);
-                    $ocr = substr($numbers[15], 0, 10);
-                    
-		    if(!ActivationCodes::where('code', $ocr)->exists()) {
+                    $ocr = substr(max($numbers), 0, 10);
+
+                    if (!ActivationCodes::where('code', $ocr)->exists()) {
+                        $new_entries++;
+
                         $activationCode = new \App\ActivationCodes;
-                        $activationCode->code  = $ocr;
+                        $activationCode->code = $ocr;
                         $activationCode->is_used = false;
                         $activationCode->save();
                     }
-
-                    $indexOCR = 0;
                 }
 
-                // Following codes
-                if($indexOCR == 4) {
-                    $numbers = explode(' ', $code);
-
-                    if(!empty($numbers[15])){
-                        $ocr = substr($numbers[15], 0, 10);
-                    	
-			if(!ActivationCodes::where('code', $ocr)->exists()) {
-                          $activationCode = new \App\ActivationCodes;
-                          $activationCode->code  = $ocr;
-                          $activationCode->is_used = false;
-                          $activationCode->save();
-                    	}
-		    }
+                if($indexOCR === 3) {
                     $indexOCR = 0;
+                } else {
+                    $indexOCR++;
                 }
-                $index++;
-                $indexOCR++;
             }
 
             fclose($codes);
 
-            $request->session()->flash('message', 'Filen uppladdad och koderna är nu i databasen');
+            $request->session()->flash('message',
+                'Filen uppladdad (' . $new_entries . ' nya) och koderna är nu i databasen');
         } else {
             // Error: Could not open file
-           $request->session()->flash('error', 'Filen kunde inte laddas upp');
+            $request->session()->flash('error', 'Filen kunde inte laddas upp');
         }
         return redirect('settings');
     }
@@ -97,14 +99,14 @@ class SettingsController extends Controller
 
     public function update(Request $request)
     {
-        if($request->input('password') === $request->input('repeatPassword')) {
+        if ($request->input('password') === $request->input('repeatPassword')) {
 
             $rules = [
                 'password' => 'required',
                 'repeatPassword' => 'required'
             ];
 
-            $validator = Validator::make($request->all(),$rules);
+            $validator = Validator::make($request->all(), $rules);
 
             // process the login
             if ($validator->fails()) {
