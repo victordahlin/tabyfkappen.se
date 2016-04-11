@@ -43,21 +43,22 @@ class RestController extends Controller
     public function getOffers()
     {
         $offers = \App\Offers::where('end_date', '>=', new \DateTime('today'))->get();
+        echo $offers->count() . "\n";
 
         $user_id = JWTAuth::parseToken()->authenticate()->id;
 
-        $used_offer_id = \App\OffersUsed::where('user_id', '=', $user_id)->get()->pluck('offer_id');
+        $used_offer_id = \App\OffersUsed::where('user_id', '=', $user_id)->get()->pluck('offer_id')->toArray();
 
-        $offers = $offers->reject(function($offer) use($used_offer_id) {
-            return $used_offer_id->search(function($id) use($offer) {
-               return $offer->id === $id;
-            });
+        $offers = $offers->filter(function($value) use($used_offer_id) {
+            return !in_array($value->id, $used_offer_id);
         });
 
-        return response()->json($offers->flatten(), 200);
+	echo "<pre>;
+        var_dump($offers->toJSON());
+        echo "</pre>;
 
 
-        
+        //return response()->json($offers, 200);
     }
 
     /**

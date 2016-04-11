@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ActivationCodes;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -52,11 +53,13 @@ class SettingsController extends Controller
                 if($index == 2) {
                     $numbers = explode(' ', $code);
                     $ocr = substr($numbers[15], 0, 10);
-
-                    $activationCode = new \App\ActivationCodes;
-                    $activationCode->code  = $ocr;
-                    $activationCode->is_used = false;
-                    $activationCode->save();
+                    
+		    if(!ActivationCodes::where('code', $ocr)->exists()) {
+                        $activationCode = new \App\ActivationCodes;
+                        $activationCode->code  = $ocr;
+                        $activationCode->is_used = false;
+                        $activationCode->save();
+                    }
 
                     $indexOCR = 0;
                 }
@@ -67,12 +70,14 @@ class SettingsController extends Controller
 
                     if(!empty($numbers[15])){
                         $ocr = substr($numbers[15], 0, 10);
-
-                        $activationCode = new \App\ActivationCodes;
-                        $activationCode->code  = $ocr;
-                        $activationCode->is_used = false;
-                        $activationCode->save();
-                    }
+                    	
+			if(!ActivationCodes::where('code', $ocr)->exists()) {
+                          $activationCode = new \App\ActivationCodes;
+                          $activationCode->code  = $ocr;
+                          $activationCode->is_used = false;
+                          $activationCode->save();
+                    	}
+		    }
                     $indexOCR = 0;
                 }
                 $index++;

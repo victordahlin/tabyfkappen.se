@@ -46,18 +46,18 @@ class RestController extends Controller
 
         $user_id = JWTAuth::parseToken()->authenticate()->id;
 
-        $used_offer_id = \App\OffersUsed::where('user_id', '=', $user_id)->get()->pluck('offer_id');
+        $offer_id_user = \App\OffersUsed::where('user_id', '=', $user_id)->get()->pluck('offer_id');
+        $offer_used = collect();
 
-        $offers = $offers->reject(function($offer) use($used_offer_id) {
-            return $used_offer_id->search(function($id) use($offer) {
-               return $offer->id === $id;
-            });
-        });
+        foreach($offer_id_user as $id) {
+            $offer = \App\Offers::where('id', $id)->first();
+            echo . "<pre>" . $offer . "</pre>";
+            $offer_used = $offer_used->push($offer);
+        }
 
-        return response()->json($offers->flatten(), 200);
+        //$offer_not_used = $offers->diff($offer_used);
 
-
-        
+        return response()->json($offer_id_user, 200);
     }
 
     /**
