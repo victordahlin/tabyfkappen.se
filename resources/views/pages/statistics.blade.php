@@ -14,8 +14,8 @@
         @foreach($company_stats as $key => $company)
             <tr>
                 <td>
-                    <a href="{{ '#'.preg_replace('/\s+&/', '', $key) }}" data-toggle="collapse" aria-expanded="false">{{ $key }}</a>
-                    <div class="collapse" id="{{ preg_replace('/\s+&/', '', $key) }}">
+                    <a href="{{ '#'.preg_replace('/[^A-Öa-Ö0-9]+/','',$key) }}" data-toggle="collapse" aria-expanded="false">{{ $key }}</a>
+                    <div class="collapse" id="{{ preg_replace('/[^A-Öa-Ö0-9]+/', '', $key) }}">
                         <table class="table sortable">
                             <thead>
                             <th>{{ trans('messages.offers') }}</th>

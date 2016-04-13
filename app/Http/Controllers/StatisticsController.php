@@ -18,7 +18,7 @@ class StatisticsController extends Controller
         // Get offers for companies
         $company = new \App\Companies();
         $company_stats = $company->getUsedOffersForCompanies();
-
+        
         return view('pages.statistics',compact('company_stats', 'activation_codes'));
     }
 
