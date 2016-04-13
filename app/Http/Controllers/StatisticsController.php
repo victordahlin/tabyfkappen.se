@@ -12,7 +12,8 @@ class StatisticsController extends Controller
     public function index()
     {
         $activation_code = new \App\ActivationCodes();
-        $activation_codes = array('code' => $activation_code->getNumCodes(), 'used' => $activation_code->getNumUsedCodes());
+        $activation_codes = array('code' => $activation_code->getNumCodes(),
+            'used' => $activation_code->getNumUsedCodes());
 
         // Get offers for companies
         $company = new \App\Companies();

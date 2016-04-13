@@ -54,7 +54,6 @@ class SettingsController extends Controller
             $code = fgets($codes);
 
             while (($code = fgets($codes)) !== false) {
-
                 // If file really long and bank inserted special
                 // row breaks then ignore two lines
                 if($indexOCR === 0 && strpos($code, 'SEK') !== false) {
