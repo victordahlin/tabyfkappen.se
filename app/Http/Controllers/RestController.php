@@ -70,18 +70,15 @@ class RestController extends Controller
 
         echo "used: " . $used_offer_id->count() . "\n";
 
-        $filtered = collect();
-
         foreach($offers as $key => $value) {
             foreach($used_offer_id as $id) {
-                if($value->id != $id) {
-                    //$offers->forget($key);
-                    $filtered->push($value);
+                if($value->id === $id) {
+                    $offers->forget($value);
                 }
             }
         }
 
-        echo "after: " . $filtered->count() . "\n";
+        echo "after: " . $offers->count() . "\n";
 
         //return response()->json($offers->flatten(), 200);
     }
