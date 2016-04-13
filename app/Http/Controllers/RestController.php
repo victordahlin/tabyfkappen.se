@@ -48,6 +48,26 @@ class RestController extends Controller
 
         $used_offer_id = \App\OffersUsed::where('user_id', '=', $user_id)->get()->pluck('offer_id');
 
+        $offers = $offers->reject(function($offer) use($used_offer_id) {
+            return $used_offer_id->search(function($id) use($offer) {
+               return $offer->id === $id;
+            });
+        });
+
+        return response()->json($offers->flatten(), 200);
+    }
+    
+    /**
+     * @return array of offers
+     */
+    public function getOffersDev()
+    {
+        $offers = \App\Offers::where('end_date', '>=', new \DateTime('today'))->get();
+
+        $user_id = JWTAuth::parseToken()->authenticate()->id;
+
+        $used_offer_id = \App\OffersUsed::where('user_id', '=', $user_id)->get()->pluck('offer_id');
+
         foreach($offers as $key => $value) {
             foreach($used_offer_id as $id) {
                 if($offers->contains($id)) {
@@ -56,7 +76,7 @@ class RestController extends Controller
             }
         }
 
-        return response()->json($offers->flatten(), 200);
+        response()->json($offers->flatten(), 200);
     }
 
     /**
