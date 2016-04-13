@@ -58,6 +58,31 @@ class RestController extends Controller
         return response()->json($offers->flatten(), 200);
     }
 
+    public function getOffersDev()
+    {
+        $offers = \App\Offers::where('end_date', '>=', new \DateTime('today'))->get();
+
+        echo "before: " . $offers->count() . "\n";
+
+        $user_id = JWTAuth::parseToken()->authenticate()->id;
+
+        $used_offer_id = \App\OffersUsed::where('user_id', '=', $user_id)->get()->pluck('offer_id');
+
+        echo "used: " . $used_offer_id->count() . "\n";
+
+        foreach($offers as $key => $value) {
+            foreach($used_offer_id as $id) {
+                if($offers->contains($id)) {
+                    $offers->forget($key);
+                }
+            }
+        }
+
+        echo "after: " . $offers->count() . "\n";
+
+        //return response()->json($offers->flatten(), 200);
+    }
+
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
