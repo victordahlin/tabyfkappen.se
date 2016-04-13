@@ -50,7 +50,7 @@ class RestController extends Controller
 
         foreach($offers as $key => $value) {
             foreach($used_offer_id as $id) {
-                if($offers->contains($id)) {
+                if($value->id === $id) {
                     $offers->forget($key);
                 }
             }
@@ -73,7 +73,7 @@ class RestController extends Controller
         foreach($offers as $key => $value) {
             foreach($used_offer_id as $id) {
                 if($value->id === $id) {
-                    $offers->forget($value);
+                    $offers->forget($key);
                 }
             }
         }
