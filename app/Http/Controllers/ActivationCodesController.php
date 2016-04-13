@@ -19,7 +19,7 @@ class ActivationCodesController extends Controller
      */
     public function index()
     {
-        $activationCodes = \App\ActivationCodes::all();
+        $activationCodes = \App\ActivationCodes::paginate(15);
         return view('activationcodes.index', compact('activationCodes'));
     }
 

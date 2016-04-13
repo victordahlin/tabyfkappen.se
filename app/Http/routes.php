@@ -50,8 +50,9 @@ Route::group(['prefix' => 'api/v1/'], function()
     Route::get('getInfo', 'RestController@getInfo');
     Route::get('getCompanies', 'RestController@getCompanies');
     Route::get('getOffers', 'RestController@getOffers');
-    Route::get('dev', 'RestController@getOffersDev');
     Route::get('check', 'RestController@isTokenValid');
+    
+    Route::get('dev', 'RestController@getOffersDev');
 
     Route::post('reset', 'Auth\PasswordController@postEmailRestAPI');
 

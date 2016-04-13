@@ -7,7 +7,7 @@
       <div class="alert alert-success">{{ Session::get('message') }}</div>
     @endif
 
-    <table class="table">
+    <table class="table sortable">
       <thead>
       <tr>
         <th>{{ trans('messages.first-name') }}</th>
