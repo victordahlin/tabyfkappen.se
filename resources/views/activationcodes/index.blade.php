@@ -42,6 +42,7 @@
         </tbody>
     </table>
     <div class="pagination"> {!! $activationCodes->render()  !!} </div>
+    <br>
 
     <a href="{!! url('activation-codes/create') !!}" class="btn btn-primary">{{ trans('messages.activation-codes-add') }}</a>
 @stop
