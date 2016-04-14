@@ -18,7 +18,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users = \App\User::all();
+        $users = \App\User::paginate(15);
         $used_offer = [];
 
         foreach($users as $user) {
