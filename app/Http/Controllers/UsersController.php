@@ -19,6 +19,7 @@ class UsersController extends Controller
     public function index()
     {
         $users = \App\User::paginate(15);
+        $users_tot = \App\User::all()->count();
         $used_offer = [];
 
         foreach($users as $user) {
@@ -28,7 +29,7 @@ class UsersController extends Controller
             array_push($used_offer, $offers);
         }
 
-        return view('users.index', compact('users','used_offer'));
+        return view('users.index', compact('users','used_offer', 'users_tot'));
     }
 
     /**
