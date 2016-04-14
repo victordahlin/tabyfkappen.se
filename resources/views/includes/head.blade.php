@@ -10,3 +10,6 @@
 <link rel="stylesheet" href="{{ asset('css/bootstrap-sortable.css')}}" media="screen" title="no title" charset="utf-8">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
 
+<style>
+    body { padding-top: 70px; }
+</style>
