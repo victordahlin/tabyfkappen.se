@@ -10,39 +10,38 @@
         <div class="alert alert-danger">{{ Session::get('error') }}</div>
     @endif
 
-    <div class="row">
-        <table class="table sortable">
-            <thead>
+    <table class="table sortable">
+        <thead>
+        <tr>
+            <th>{{ trans('messages.name') }}</th>
+            <th>{{ trans('messages.is-used') }}</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach($activationCodes as $ocr)
             <tr>
-                <th>{{ trans('messages.name') }}</th>
-                <th>{{ trans('messages.is-used') }}</th>
-                <th></th>
-                <th></th>
+                <td>{{ $ocr->code }}</td>
+                <td>@if($ocr->is_used) Ja @else Nej @endif</td>
+                <td>
+                    {!! Form::open(['url' => 'activation-codes/' . $ocr->id,'class' => 'pull-right']) !!}
+                    {!! Form::hidden('_method', 'DELETE') !!}
+                    {!! Form::button('<span class="glyphicon glyphicon-remove"></span>',
+                                    ['class'=>'btn btn-default', 'type'=>'submit']) !!}
+                    {!! Form::close() !!}
+                </td>
+                <td>
+                    {!! Form::open(['url' => 'activation-codes/' . $ocr->id . '/edit']) !!}
+                    {!! Form::hidden('_method', 'GET') !!}
+                    {!! Form::button('<span class="glyphicon glyphicon-pencil"></span>',['class'=>'btn btn-default', 'type'=>'submit']) !!}
+                    {!! Form::close() !!}
+                </td>
             </tr>
-            </thead>
-            <tbody>
-            @foreach($activationCodes as $ocr)
-                <tr>
-                    <td>{{ $ocr->code }}</td>
-                    <td>@if($ocr->is_used) Ja @else Nej @endif</td>
-                    <td>
-                        {!! Form::open(['url' => 'activation-codes/' . $ocr->id,'class' => 'pull-right']) !!}
-                        {!! Form::hidden('_method', 'DELETE') !!}
-                        {!! Form::button('<span class="glyphicon glyphicon-remove"></span>',
-                                        ['class'=>'btn btn-default', 'type'=>'submit']) !!}
-                        {!! Form::close() !!}
-                    </td>
-                    <td>
-                        {!! Form::open(['url' => 'activation-codes/' . $ocr->id . '/edit']) !!}
-                        {!! Form::hidden('_method', 'GET') !!}
-                        {!! Form::button('<span class="glyphicon glyphicon-pencil"></span>',['class'=>'btn btn-default', 'type'=>'submit']) !!}
-                        {!! Form::close() !!}
-                    </td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
-        <div class="pagination"> {!! $activationCodes->render()  !!} </div>
-    </div>
+        @endforeach
+        </tbody>
+    </table>
+    <div class="pagination"> {!! $activationCodes->render()  !!} </div>
+
     <a href="{!! url('activation-codes/create') !!}" class="btn btn-primary">{{ trans('messages.activation-codes-add') }}</a>
 @stop
