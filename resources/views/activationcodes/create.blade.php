@@ -24,12 +24,11 @@
 
         <div class="form-group">
             {!! Form::label('code', trans('messages.activation-code')) !!}
-            {!! Form::text('code', null, array('class' => 'form-control')) !!}
-        </div>
+            {!! Form::text('code', null, array(
+                'class' => 'form-control',
+                'placeholder' => '10101..'
 
-        <div class="form-group">
-            {!! Form::label('is_used', trans('messages.is-used')) !!}
-            {!! Form::text('is_used', null, array('class' => 'form-control')) !!}
+            )) !!}
         </div>
 
         {!! Form::submit(trans('messages.activation-codes-add'),array('class' => 'btn btn-primary')) !!}

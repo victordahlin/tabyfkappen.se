@@ -43,10 +43,9 @@ class ActivationCodesController extends Controller
     {
         $rules = [
             'code' => 'required',
-            'is_used' => 'required',
         ];
 
-        $validator = Validator::make(Input::all(), $rules);
+        $validator = Validator::make($request->all(), $rules);
 
         // process the login
         if ($validator->fails()) {
@@ -56,7 +55,7 @@ class ActivationCodesController extends Controller
         } else {
             $activationCode = new \App\ActivationCodes;
             $activationCode->code = $request->input('code');
-            $activationCode->is_used = $request->input('is_used');
+            $activationCode->is_used = 0;
             $activationCode->save();
 
             $request->session()->flash('message', trans('messages.activation-codes-created'));
@@ -85,7 +84,13 @@ class ActivationCodesController extends Controller
     public function edit($id)
     {
         $activationCode = \App\ActivationCodes::find($id);
-        return view('activationcodes.edit', compact('activationCode'));
+        $used = "Nej";
+
+        if($activationCode->is_used) {
+            $used = "Ja";
+        }
+
+        return view('activationcodes.edit', compact('activationCode', 'used'));
     }
 
     /**
@@ -110,9 +115,14 @@ class ActivationCodesController extends Controller
                 ->withInput()
                 ->withErrors($validator);
         } else {
+            $used = 1;
+            if(strcmp(strtolower($request->is_used), 'ja') !== 0) {
+                $used = 0;
+            }
+
             $activationCode = \App\ActivationCodes::find($id);
             $activationCode->code = $request->input('code');
-            $activationCode->is_used = $request->input('is_used');
+            $activationCode->is_used = $used;
             $activationCode->save();
 
             $request->session()->flash('message', trans('messages.activation-codes-updated'));

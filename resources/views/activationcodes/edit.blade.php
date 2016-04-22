@@ -26,10 +26,10 @@
 
         <div class="form-group">
             {!! Form::label('is_used', trans('messages.is-used')) !!}
-            {!! Form::text('is_used', null, array('class' => 'form-control')) !!}
+            {!! Form::text('is_used', $used, array('class' => 'form-control')) !!}
         </div>
 
-        {!! Form::submit(trans('messages.activation-codes-updated'),array('class' => 'btn btn-primary')) !!}
+        {!! Form::submit(trans('messages.update-button'),array('class' => 'btn btn-primary')) !!}
         {!! Form::close() !!}
     </div>
 

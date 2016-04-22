@@ -57,6 +57,7 @@ return [
     'activation-codes-removed' => 'Aktiveringskod borttagen',
     'activation-codes-updated' => 'Aktiveringskod uppdaterad',
 
+    'update-button' => 'Uppdatera',
     'login-button' => 'Logga in',
     'name' => 'Namn',
     'first-name' => 'Förnamn',
