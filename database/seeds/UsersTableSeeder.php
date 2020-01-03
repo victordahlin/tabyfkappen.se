@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class UsersTableSeeder extends Seeder
 {
@@ -13,18 +14,20 @@ class UsersTableSeeder extends Seeder
     {
         DB::table('users')->insert(array(
             array(
-                'first_name'=>'Sven',
+                'first_name' => 'Sven',
                 'last_name' => 'Svensson',
-                'email'=>'victordahlin@gmail.com',
+                'email' => 'test@gmail.com',
                 'password' => bcrypt('test'),
-                'is_admin' => false
+                'is_admin' => false,
+                "activation_code" => "",
             ),
             array(
-                'first_name'=>'Admin',
+                'first_name' => 'Admin',
                 'last_name' => '',
-                'email'=>'admin@admin.com',
+                'email' => 'admin@admin.com',
                 'password' => bcrypt('admin'),
-                'is_admin' => true
+                'is_admin' => true,
+                "activation_code" => "",
             ),
         ));
     }
